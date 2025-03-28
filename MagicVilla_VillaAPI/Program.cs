@@ -1,4 +1,6 @@
-using MagicVilla_VillaAPI.Services;
+
+using MagicVilla_VillaAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaAPI
 {
@@ -27,9 +29,14 @@ namespace MagicVilla_VillaAPI
             //builder.Host.UseSerilog();
             #endregion
 
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+
             builder.Services.AddControllers().AddNewtonsoftJson();
 
-            builder.Services.AddSingleton<ILogging, LoggingV2>();
+            builder.Services.AddAutoMapper(typeof(MappingConfig));
 
             builder.Services.AddSwaggerGen();
 
