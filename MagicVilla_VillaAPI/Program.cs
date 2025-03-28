@@ -9,7 +9,13 @@ namespace MagicVilla_VillaAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            //builder.Services.AddControllers(options =>//If the application type is not JSON,
+            //                                          //then we want to display an error message.
+            //{
+            //    options.ReturnHttpNotAcceptable = true;
+            //}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();//to support XML formatting
+
+            builder.Services.AddControllers().AddNewtonsoftJson();
 
             builder.Services.AddSwaggerGen();
 
