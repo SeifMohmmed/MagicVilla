@@ -1,5 +1,7 @@
 
 using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Repository;
+using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaAPI
@@ -33,6 +35,8 @@ namespace MagicVilla_VillaAPI
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddScoped<IVillaRepository, VillaRepostiory>();
+            builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepostiory>();
 
             builder.Services.AddControllers().AddNewtonsoftJson();
 
