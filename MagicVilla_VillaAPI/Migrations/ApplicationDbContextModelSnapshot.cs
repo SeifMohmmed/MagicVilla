@@ -31,18 +31,15 @@ namespace MagicVilla_VillaAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Amenity")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Details")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageURL")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -63,7 +60,7 @@ namespace MagicVilla_VillaAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Villas", (string)null);
+                    b.ToTable("Villas");
 
                     b.HasData(
                         new
@@ -142,7 +139,6 @@ namespace MagicVilla_VillaAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SpecialDetails")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -155,23 +151,18 @@ namespace MagicVilla_VillaAPI.Migrations
 
                     b.HasIndex("VillaID");
 
-                    b.ToTable("VillaNumbers", (string)null);
+                    b.ToTable("VillaNumbers");
                 });
 
             modelBuilder.Entity("MagicVilla_VillaAPI.Models.VillaNumber", b =>
                 {
                     b.HasOne("MagicVilla_VillaAPI.Models.Villa", "Villa")
-                        .WithMany("VillaNumbers")
+                        .WithMany()
                         .HasForeignKey("VillaID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Villa");
-                });
-
-            modelBuilder.Entity("MagicVilla_VillaAPI.Models.Villa", b =>
-                {
-                    b.Navigation("VillaNumbers");
                 });
 #pragma warning restore 612, 618
         }

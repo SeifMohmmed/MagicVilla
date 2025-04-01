@@ -13,6 +13,7 @@ public class Repository<T> : IRepository<T> where T : class
     public Repository(ApplicationDbContext context)
     {
         _context = context;
+        //_context.VillaNumbers.Include(v => v.Villa);
         _dbset = _context.Set<T>();
     }
     public async Task CreateAsync(T model)
@@ -25,7 +26,7 @@ public class Repository<T> : IRepository<T> where T : class
         _dbset.Update(model);
         await SaveAsync();
     }
-    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
+    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
     {
         IQueryable<T> query = _dbset;
 
@@ -33,10 +34,17 @@ public class Repository<T> : IRepository<T> where T : class
         {
             query = query.Where(filter);
         }
+        if (includeProperties != null)
+        {
+            foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(prop);
+            }
+        }
         return await query.ToListAsync();
     }
 
-    public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true)
+    public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null)
     {
         IQueryable<T> query = _dbset;
         if (!tracked)
@@ -47,6 +55,13 @@ public class Repository<T> : IRepository<T> where T : class
         if (filter != null)
         {
             query = query.Where(filter);
+        }
+        if (includeProperties != null)
+        {
+            foreach (var prop in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(prop);
+            }
         }
         return await query.FirstOrDefaultAsync();
     }

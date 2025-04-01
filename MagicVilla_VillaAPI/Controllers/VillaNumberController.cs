@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MagicVilla_VillaAPI.Dto;
 using MagicVilla_VillaAPI.Models;
+using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +30,7 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             try
             {
-                IEnumerable<VillaNumber> villaList = await _dbVillaNum.GetAllAsync();
+                IEnumerable<VillaNumber> villaList = await _dbVillaNum.GetAllAsync(includeProperties:"Villa");
                 _response.Result = _mapper.Map<List<VillaNumberDTO>>(villaList);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -89,12 +89,12 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 if (await _dbVillaNum.GetAsync(v => v.VillaNo == createVillaNumDTO.VillaNo) != null)
                 {
-                    ModelState.AddModelError("Name", "Villa Number Already Exists!");
+                    ModelState.AddModelError("ErrorMessages", "Villa Number Already Exists!");
                     return BadRequest(ModelState);
                 }
                 if(await _dbVilla.GetAllAsync(v=>v.Id==createVillaNumDTO.VillaNo)==null)
                 {
-                    ModelState.AddModelError("Villa Num", "Villa Number is Invalid!");
+                    ModelState.AddModelError("ErrorMessages", "Villa Number is Invalid!");
                     return BadRequest(ModelState);
                 }
                 if (createVillaNumDTO == null)
@@ -153,7 +153,7 @@ namespace MagicVilla_VillaAPI.Controllers
                     return BadRequest(villaNumUpdateDTO);
                 if (await _dbVilla.GetAllAsync(v => v.Id == villaNumUpdateDTO.VillaNo) == null)
                 {
-                    ModelState.AddModelError("Villa Num", "Villa Number is Invalid!");
+                    ModelState.AddModelError("ErrorMessages", "Villa Number is Invalid!");
                     return BadRequest(ModelState);
                 }
                 VillaNumber villa = _mapper.Map<VillaNumber>(villaNumUpdateDTO);

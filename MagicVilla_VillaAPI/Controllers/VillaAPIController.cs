@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MagicVilla_VillaAPI.Data;
-using MagicVilla_VillaAPI.Dto;
 using MagicVilla_VillaAPI.Models;
+using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -89,7 +89,7 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 if (await _dbVilla.GetAsync(v => v.Name.ToLower() == createVillaDTO.Name.ToLower()) != null)
                 {
-                    ModelState.AddModelError("Name", "Villa Already Exists!");
+                    ModelState.AddModelError("ErrorMessages", "Villa Already Exists!");
                     return BadRequest(ModelState);
                 }
 
