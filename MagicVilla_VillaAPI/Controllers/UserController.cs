@@ -32,7 +32,7 @@ namespace MagicVilla_VillaAPI.Controllers
             _response.IsSuccess = true;
             _response.Result=loginResponse;
 
-            return BadRequest(_response);
+            return Ok(_response);
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterationRequestDTO model)
@@ -56,7 +56,7 @@ namespace MagicVilla_VillaAPI.Controllers
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
 
-            return BadRequest(_response);
+            return Ok(_response);
         }
     }
 }
