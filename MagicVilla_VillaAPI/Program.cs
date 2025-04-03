@@ -2,7 +2,10 @@
 using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Repository;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MagicVilla_VillaAPI
 {
@@ -39,6 +42,28 @@ namespace MagicVilla_VillaAPI
             builder.Services.AddScoped<IVillaRepository, VillaRepostiory>();
             builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepostiory>();
 
+            var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
+
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+             .AddJwtBearer(x =>
+             {
+                 x.RequireHttpsMetadata = false;
+                 x.SaveToken = true;
+                 x.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                     ValidateIssuer = false,
+                     ValidateAudience = false
+                 };
+             });
+
+
+
             builder.Services.AddControllers().AddNewtonsoftJson();
 
             builder.Services.AddAutoMapper(typeof(MappingConfig));
@@ -55,7 +80,7 @@ namespace MagicVilla_VillaAPI
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
