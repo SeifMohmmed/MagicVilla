@@ -35,6 +35,7 @@ namespace MagicVilla_VillaAPI
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddScoped<IUserRepository, UserRepostiory>();
             builder.Services.AddScoped<IVillaRepository, VillaRepostiory>();
             builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepostiory>();
 
