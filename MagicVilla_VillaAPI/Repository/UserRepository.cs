@@ -37,7 +37,12 @@ public class UserRepository : IUserRepository
         && u.Password==loginRequestDTO.Password);
         if (user == null)
         {
-            return null;
+            return new LoginResponseDTO()
+            {
+                Token = "",
+                LocalUser = null
+            };  
+        
         }
         //Generate JWT Token
         var tokenHandler = new JwtSecurityTokenHandler();
