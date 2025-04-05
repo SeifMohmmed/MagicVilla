@@ -22,6 +22,15 @@ public class Program
 
         builder.Services.AddHttpClient<IAuthService, AuthService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddDistributedMemoryCache();
+
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout= TimeSpan.FromMinutes(100);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
+
 
         builder.Services.AddAutoMapper(typeof(MappingConfig));
 
@@ -39,6 +48,7 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
+        app.UseSession();
 
         app.MapStaticAssets();
         app.MapControllerRoute(
