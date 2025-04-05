@@ -4,6 +4,7 @@ using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Models.VM;
 using MagicVilla_Web.Services;
 using MagicVilla_Web.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -37,6 +38,7 @@ namespace MagicVilla_Web.Controllers
 
             return View(villaList);
         }
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateVillaNumber()
         {
             VillaNumberCreateVM villaNumberVM = new VillaNumberCreateVM();
@@ -56,6 +58,7 @@ namespace MagicVilla_Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateVillaNumber(VillaNumberCreateVM model)
         {
             if (ModelState.IsValid)
@@ -85,6 +88,8 @@ namespace MagicVilla_Web.Controllers
             }
             return View(model);
         }
+
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateVillaNumber(int villaNo)
         {
             VillaNumberUpdateVM villaNumberVM = new ();
@@ -110,6 +115,7 @@ namespace MagicVilla_Web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateVillaNumber(VillaNumberUpdateVM model)
         {
             if (ModelState.IsValid)
@@ -140,6 +146,7 @@ namespace MagicVilla_Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteVillaNumber(int villaNo)
         {
             VillaNumberDeleteVM villaNumberVM = new();
@@ -165,6 +172,7 @@ namespace MagicVilla_Web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteVillaNumber(VillaNumberDeleteVM model)
         {
             var response = await _villaNumberService.DeleteAsync<APIResponse>(model.VillaNumber.VillaNo);
