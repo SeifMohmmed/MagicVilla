@@ -1,5 +1,6 @@
 using MagicVilla_Web.Services;
 using MagicVilla_Web.Services.IServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MagicVilla_Web;
 
@@ -12,7 +13,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddHttpClient<IVillaService, VillaService>(); 
+        builder.Services.AddHttpClient<IVillaService, VillaService>();
         //for a single request it will have one object of villa service
         //even if it is requested ten times, it will use the same object
         builder.Services.AddScoped<IVillaService, VillaService>();
@@ -24,9 +25,18 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddDistributedMemoryCache();
 
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options =>
+               {
+                   options.Cookie.HttpOnly = true;
+                   options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                   options.LoginPath = "/Auth/Login";
+                   options.AccessDeniedPath = "/Auth/AccessDenied";
+                   options.SlidingExpiration = true;
+               });
         builder.Services.AddSession(options =>
         {
-            options.IdleTimeout= TimeSpan.FromMinutes(100);
+            options.IdleTimeout = TimeSpan.FromMinutes(100);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
         });
@@ -46,7 +56,7 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseRouting();
-
+        app.UseAuthentication();
         app.UseAuthorization();
         app.UseSession();
 
