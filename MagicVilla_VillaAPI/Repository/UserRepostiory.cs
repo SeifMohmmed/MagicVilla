@@ -40,7 +40,7 @@ public class UserRepostiory : IUserRepository
             return new LoginResponseDTO()
             {
                 Token = "",
-                LocalUser = null
+                User = null
             };  
         
         }
@@ -61,7 +61,7 @@ public class UserRepostiory : IUserRepository
         var token=tokenHandler.CreateToken(tokenDescriptor);
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO() 
         { 
-        LocalUser = user,
+        User = user,
         Token=tokenHandler.WriteToken(token),
         };
         return loginResponseDTO;
