@@ -15,51 +15,56 @@ public class VillaNumberService : BaseService, IVillaNumberService
         _clientFactory = clientFactory;
         _villaUrl = configuration.GetValue<string>("ServiceUrls:VillaAPI");
     }
-    public Task<T> CreateAsync<T>(VillaNumberCreateDTO dto)
+    public Task<T> CreateAsync<T>(VillaNumberCreateDTO dto, string token)
     {
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.POST,
             Data = dto,
-            URL = _villaUrl+ "/api/villaNumber"
+            URL = _villaUrl+ "/api/villaNumber",
+            Token = token
         });
     }
 
 
-    public Task<T> DeleteAsync<T>(int id)
+    public Task<T> DeleteAsync<T>(int id, string token)
     {
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.DELETE,
-            URL = _villaUrl + "/api/villaNumber/" + id
+            URL = _villaUrl + "/api/villaNumber/" + id,
+            Token = token
         });
     }
 
-    public Task<T> GetAllAsync<T>()
+    public Task<T> GetAllAsync<T>(string token)
     {
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.GET,
-            URL = _villaUrl + "/api/villaNumber"
+            URL = _villaUrl + "/api/villaNumber",
+            Token = token
         });
     }
 
-    public Task<T> GetAsync<T>(int id)
+    public Task<T> GetAsync<T>(int id, string token)
     {
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.GET,
-            URL = _villaUrl + "/api/villaNumber/" + id
+            URL = _villaUrl + "/api/villaNumber/" + id,
+            Token = token
         });
     }
 
-    public Task<T> UpdateAsync<T>(VillaNumberUpdateDTO dto)
+    public Task<T> UpdateAsync<T>(VillaNumberUpdateDTO dto, string token)
     {
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.PUT,
             Data = dto,
-            URL = _villaUrl + "/api/villaNumber/" +dto.VillaNo
+            URL = _villaUrl + "/api/villaNumber/" +dto.VillaNo,
+            Token = token
         });
     }
 }
