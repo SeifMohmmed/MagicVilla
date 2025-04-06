@@ -22,7 +22,7 @@ public class AuthService : BaseService, IAuthService
         {
             ApiType = SD.ApiType.POST,
             Data = obj,
-            URL = _villaUrl + "/api/User/login"
+            URL = _villaUrl + "/api/v1/User/login"
         });
     }
 
@@ -32,7 +32,7 @@ public class AuthService : BaseService, IAuthService
         {
             ApiType = SD.ApiType.POST,
             Data = obj,
-            URL = _villaUrl + "/api/User/register"
+            URL = _villaUrl + "/api/v1/User/register"
         });
     }
 }
