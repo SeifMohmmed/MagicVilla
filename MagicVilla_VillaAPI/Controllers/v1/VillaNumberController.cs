@@ -7,12 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace MagicVilla_VillaAPI.Controllers
+namespace MagicVilla_VillaAPI.Controllers.v1
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
-    [ApiVersion("2.0")]
     public class VillaNumberController : ControllerBase
     {
         private readonly IVillaNumberRepository _dbVillaNum;
@@ -29,7 +28,7 @@ namespace MagicVilla_VillaAPI.Controllers
         //CRUD Operation 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [MapToApiVersion("1.0")]
+        //[MapToApiVersion("1.0")]
         public async Task<ActionResult<APIResponse>> GetAll()
         {
             try
@@ -46,12 +45,6 @@ namespace MagicVilla_VillaAPI.Controllers
                     new List<string>() { ex.ToString() };
             }
             return _response;
-        }
-        [MapToApiVersion("2.0")]
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
         }
 
         [HttpGet("{id:int}",Name ="GetVillaNumber")]
