@@ -25,6 +25,13 @@ namespace MagicVilla_VillaAPI.Controllers.v1
             _mapper = mapper;
             _response = new();
         }
+
+        [HttpGet("GetString")]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "String1", "string2" };
+        }
+
         //CRUD Operation 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
