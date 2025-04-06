@@ -19,7 +19,6 @@ namespace MagicVilla_Web.Controllers
             _authService = authService;
         }
         [HttpGet]
-        [Route("login")]
         public IActionResult Login()
         {
             LoginRequestDTO obj = new();
@@ -28,7 +27,6 @@ namespace MagicVilla_Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("login")]
         public async Task<IActionResult> Login(LoginRequestDTO obj)
         {
             var response = await _authService.LoginAsync<APIResponse>(obj);
@@ -61,7 +59,7 @@ namespace MagicVilla_Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(RegisterationRequestDTO obj)
+        public async Task<IActionResult> Register(RegisterationRequestDTO obj)
         {
             var result = await _authService.RegisterAsync<APIResponse>(obj);
             if (result != null && result.IsSuccess)
