@@ -16,16 +16,18 @@ public class UserRepostiory : IUserRepository
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IMapper _mapper;
     private readonly string secretKey;
 
     public UserRepostiory(ApplicationDbContext context, IConfiguration configuration,
-        UserManager<ApplicationUser> userManager, IMapper mapper)
+        UserManager<ApplicationUser> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _userManager = userManager;
         _mapper = mapper;
         secretKey = configuration.GetValue<string>("ApiSettings:Secret");
+        _roleManager = roleManager;
     }
 
     public bool IsUnique(string username)
@@ -92,6 +94,12 @@ public class UserRepostiory : IUserRepository
             var result = await _userManager.CreateAsync(user, registerationRequestDTO.Password);
             if (result.Succeeded)
             {
+                if(!_roleManager.RoleExistsAsync("admin").GetAwaiter().GetResult())
+                {
+                    await _roleManager.CreateAsync(new IdentityRole("admin"));
+                    await _roleManager.CreateAsync(new IdentityRole("customer"));
+                }
+
                 await _userManager.AddToRoleAsync(user, "admin");
                 var userToReturn=_context.ApplicationUsers
                     .FirstOrDefault(u=>u.Name == registerationRequestDTO.UserName);
