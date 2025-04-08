@@ -7,5 +7,5 @@ public interface IUserRepository
 {
     bool IsUnique(string username);
     Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO); 
-    Task<LocalUser> Register(RegisterationRequestDTO registerationRequestDTO); 
+    Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO); 
 }
