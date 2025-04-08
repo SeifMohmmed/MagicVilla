@@ -31,7 +31,7 @@ namespace MagicVilla_VillaAPI.Controllers.v1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ResponseCache(Duration = 30)]
+        [ResponseCache(CacheProfileName = "Default30")]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             try
@@ -55,8 +55,7 @@ namespace MagicVilla_VillaAPI.Controllers.v1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        //[ResponseCache(Duration =30)]
-        //[ResponseCache(Location=ResponseCacheLocation.None,NoStore =true)]
+        [ResponseCache(CacheProfileName="Default30")]
         public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             try

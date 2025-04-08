@@ -81,7 +81,15 @@ namespace MagicVilla_VillaAPI
 
 
 
-            builder.Services.AddControllers().AddNewtonsoftJson();
+            builder.Services.AddControllers(
+                options =>
+                {
+                    options.CacheProfiles.Add("Default30"
+                        , new CacheProfile()
+                        {
+                            Duration = 30
+                        });
+                }).AddNewtonsoftJson();
 
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
