@@ -21,7 +21,7 @@ public class VillaService : BaseService, IVillaService
         {
             ApiType = SD.ApiType.POST,
             Data = dto,
-            URL = _villaUrl+ "/api/v1/villaApi",
+            URL = _villaUrl+ $"/api/{SD.CurrentAPIVersion}/villaApi",
             Token = token
         });
     }
@@ -32,7 +32,7 @@ public class VillaService : BaseService, IVillaService
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.DELETE,
-            URL = _villaUrl + "/api/v1/villaApi/" + id,
+            URL = _villaUrl + $"/api/{SD.CurrentAPIVersion}/villaApi/" + id,
             Token = token
         });
     }
@@ -42,7 +42,7 @@ public class VillaService : BaseService, IVillaService
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.GET,
-            URL = _villaUrl + "/api/v1/villaApi",
+            URL = _villaUrl + $"/api/{SD.CurrentAPIVersion}/villaApi",
             Token = token
         });
     }
@@ -52,7 +52,7 @@ public class VillaService : BaseService, IVillaService
         return SendAsync<T>(new APIRequest
         {
             ApiType = SD.ApiType.GET,
-            URL = _villaUrl + "/api/v1/villaApi/" + id,
+            URL = _villaUrl + $"/api/{SD.CurrentAPIVersion}/villaApi/" + id,
             Token = token
         });
     }
@@ -63,7 +63,7 @@ public class VillaService : BaseService, IVillaService
         {
             ApiType = SD.ApiType.PUT,
             Data = dto,
-            URL = _villaUrl + "/api/v1/villaApi/" + dto.Id,
+            URL = _villaUrl + $"/api/{SD.CurrentAPIVersion}/villaApi/" + dto.Id,
             Token = token
         });
     }

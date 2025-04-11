@@ -10,4 +10,5 @@ public class SD
         DELETE
     }
     public static string SessionToken = "JWTToken";
+    public static string CurrentAPIVersion = "v2";
 }
