@@ -203,6 +203,18 @@ namespace MagicVilla_VillaAPI.Controllers.v2
                 if (villa == null)
                     return NotFound();
 
+                if (!string.IsNullOrEmpty(villa.ImageLocalPath))
+                {
+                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), villa.ImageLocalPath);
+                    FileInfo file = new FileInfo(oldImagePath);
+
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                }
+
+
                 await _dbVilla.RemoveAsync(villa);
 
                 _response.StatusCode = HttpStatusCode.NoContent;
@@ -223,7 +235,7 @@ namespace MagicVilla_VillaAPI.Controllers.v2
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDTO updateVillaDTO)
+        public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromForm] VillaUpdateDTO updateVillaDTO)
         {
             try
             {
@@ -231,6 +243,40 @@ namespace MagicVilla_VillaAPI.Controllers.v2
                     return BadRequest(updateVillaDTO);
 
                 Villa villa = _mapper.Map<Villa>(updateVillaDTO);
+
+                if (updateVillaDTO.Image != null)
+                {
+                    if(!string.IsNullOrEmpty(updateVillaDTO.ImageLocalPath))
+                    {
+                        var oldImagePath=Path.Combine(Directory.GetCurrentDirectory(),villa.ImageLocalPath);
+                        FileInfo file=new FileInfo(oldImagePath);
+
+                        if (file.Exists)
+                        {
+                            file.Delete();
+                        }
+                    }
+
+                    var fileName = villa.Id + Path.GetExtension(updateVillaDTO.Image.FileName);
+                    string filePath = @"wwwroot\ProductImage\" + fileName;
+
+                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+
+                    using (var fileStream = new FileStream(directoryLocation, FileMode.Create))
+                    {
+                        updateVillaDTO.Image.CopyTo(fileStream);
+                    }
+
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+
+                    villa.ImageUrl = baseUrl + "/ProductImage/" + fileName;
+                    villa.ImageLocalPath = filePath;
+                }
+                else
+                {
+                    villa.ImageUrl = "https://placehold.co/600x400";
+                }
 
                 #region Before Using AutoMapper
                 //Villa villa = new()
