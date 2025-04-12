@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using static MagicVilla_Utility.SD;
 
 namespace MagicVilla_Web.Services;
 
@@ -25,13 +26,49 @@ public class BaseService : IBaseService
             var client = _httpClient.CreateClient("MagicAPI");
             HttpRequestMessage message = new HttpRequestMessage();
             message.Headers.Add("Accept", "application/json");
+            if(request.ContentType== ContentType.MultipartFormData)
+            {
+                message.Headers.Add("Accept", "*/*");
+            }
+            else
+            {
+                message.Headers.Add("Accept", "application/json");
+            }
+
             message.RequestUri = new Uri(request.URL);
 
-            if (request.Data != null)
+            //if Content Type is MultpartFormData
+            if (request.ContentType == ContentType.MultipartFormData)
             {
-                message.Content = new StringContent(JsonConvert.SerializeObject(request.Data)
-                    , Encoding.UTF8, "application/json");
+                var content=new MultipartFormDataContent();
+                foreach (var prop in request.GetType().GetProperties())
+                {
+                    var value=prop.GetValue(request.Data);
+                    if(value is FormFile)
+                    {
+                        var file = (FormFile)value;
+                        if(file!=null)
+                        {
+                            content.Add(new StreamContent(file.OpenReadStream()),prop.Name,file.FileName);
+                        }
+                    }
+                    else
+                    {
+                        content.Add(new StringContent(value==null?"":value.ToString()),prop.Name);
+                    }
+                }
+                message.Content = content;
             }
+            //if Content Type is JSON 
+            else
+            {
+                if (request.Data != null)
+                {
+                    message.Content = new StringContent(JsonConvert.SerializeObject(request.Data)
+                        , Encoding.UTF8, "application/json");
+                }
+            }
+           
             switch (request.ApiType)
             {
                 case SD.ApiType.POST:
