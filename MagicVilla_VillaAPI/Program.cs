@@ -177,7 +177,7 @@ namespace MagicVilla_VillaAPI
 
                 });
             }
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
