@@ -50,7 +50,7 @@ public class UserRepostiory : IUserRepository
         {
             return new TokenDTO()
             {
-                Token = "",
+                AccessToken = "",
             };
 
         }
@@ -72,7 +72,7 @@ public class UserRepostiory : IUserRepository
         var token = tokenHandler.CreateToken(tokenDescriptor);
         TokenDTO tokenDto = new TokenDTO()
         {
-            Token = tokenHandler.WriteToken(token),
+            AccessToken = tokenHandler.WriteToken(token),
         };
         return tokenDto;
     }

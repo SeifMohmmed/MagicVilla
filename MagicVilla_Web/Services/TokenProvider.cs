@@ -24,7 +24,7 @@ public class TokenProvider : ITokenProvider
             bool hasAcessToken = _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(SD.AccessToken, out string accessToken);
             TokenDTO tokenDTO = new TokenDTO()
             {
-                Token = accessToken,
+                AccessToken = accessToken,
             };
             return hasAcessToken ? tokenDTO : null;
         }
@@ -37,6 +37,6 @@ public class TokenProvider : ITokenProvider
     public void SetToken(TokenDTO tokenDto)
     {
         var cookiesOptions = new CookieOptions() { Expires = DateTime.Now.AddDays(60) };
-        _httpContextAccessor.HttpContext?.Response.Cookies.Append(SD.AccessToken,tokenDto.Token, cookiesOptions);
+        _httpContextAccessor.HttpContext?.Response.Cookies.Append(SD.AccessToken,tokenDto.AccessToken, cookiesOptions);
     }
 }
