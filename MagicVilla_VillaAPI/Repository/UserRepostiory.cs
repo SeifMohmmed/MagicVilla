@@ -40,7 +40,7 @@ public class UserRepostiory : IUserRepository
         return false;
     }
 
-    public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
+    public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO)
     {
         var user = await _context.ApplicationUsers
             .FirstOrDefaultAsync(u => u.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
@@ -48,10 +48,9 @@ public class UserRepostiory : IUserRepository
         bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
         if (user == null || isValid == false)
         {
-            return new LoginResponseDTO()
+            return new TokenDTO()
             {
                 Token = "",
-                User = null
             };
 
         }
@@ -71,12 +70,11 @@ public class UserRepostiory : IUserRepository
             SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
+        TokenDTO tokenDto = new TokenDTO()
         {
-            User = _mapper.Map<UserDTO>(user),
             Token = tokenHandler.WriteToken(token),
         };
-        return loginResponseDTO;
+        return tokenDto;
     }
 
     public async Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO)
