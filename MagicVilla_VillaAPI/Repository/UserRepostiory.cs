@@ -54,7 +54,48 @@ public class UserRepostiory : IUserRepository
             };
 
         }
-        //Generate JWT Token
+        var accessToken = await GetAccessToken(user);
+        TokenDTO tokenDto = new TokenDTO()
+        {
+            AccessToken = accessToken,
+        };
+        return tokenDto;
+    }
+
+    public async Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO)
+    {
+        ApplicationUser user = new()
+        {
+            UserName = registerationRequestDTO.UserName,
+            Email = registerationRequestDTO.UserName,
+            NormalizedEmail = registerationRequestDTO.UserName.ToUpper(),
+            Name = registerationRequestDTO.Name,
+        };
+        try
+        {
+            var result = await _userManager.CreateAsync(user, registerationRequestDTO.Password);
+            if (result.Succeeded)
+            {
+                if (!_roleManager.RoleExistsAsync(registerationRequestDTO.Role).GetAwaiter().GetResult())
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(registerationRequestDTO.Role));
+                }
+
+                await _userManager.AddToRoleAsync(user, registerationRequestDTO.Role);
+                var userToReturn = _context.ApplicationUsers
+                    .FirstOrDefault(u => u.Name == registerationRequestDTO.UserName);
+                return _mapper.Map<UserDTO>(userToReturn);
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+        return new UserDTO();
+    }
+    public async Task<string> GetAccessToken(ApplicationUser user)
+    {
+        //if user was found Generate JWT Token
         var roles = await _userManager.GetRolesAsync(user);
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(secretKey);
@@ -70,42 +111,7 @@ public class UserRepostiory : IUserRepository
             SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        TokenDTO tokenDto = new TokenDTO()
-        {
-            AccessToken = tokenHandler.WriteToken(token),
-        };
-        return tokenDto;
-    }
-
-    public async Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO)
-    {
-        ApplicationUser user = new()
-        {
-            UserName = registerationRequestDTO.UserName,
-            Email=registerationRequestDTO.UserName,
-            NormalizedEmail=registerationRequestDTO.UserName.ToUpper(),
-            Name = registerationRequestDTO.Name,
-        };
-        try
-        {
-            var result = await _userManager.CreateAsync(user, registerationRequestDTO.Password);
-            if (result.Succeeded)
-            {
-                if(!_roleManager.RoleExistsAsync(registerationRequestDTO.Role).GetAwaiter().GetResult())
-                {
-                    await _roleManager.CreateAsync(new IdentityRole(registerationRequestDTO.Role));
-                }
-
-                await _userManager.AddToRoleAsync(user,registerationRequestDTO.Role);
-                var userToReturn=_context.ApplicationUsers
-                    .FirstOrDefault(u=>u.Name == registerationRequestDTO.UserName);
-                return _mapper.Map<UserDTO>(userToReturn);
-            }
-        }
-        catch (Exception ex)
-        {
-
-        }
-        return new UserDTO();
+        var tokenStr = tokenHandler.WriteToken(token);
+        return tokenStr;
     }
 }
