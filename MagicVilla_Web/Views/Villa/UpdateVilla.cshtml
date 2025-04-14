@@ -64,8 +64,10 @@
                         <label asp-for="ImageUrl" class="control-label pt-2" style="font-size:20px;">Image</label>
                     </div>
                     <div class="col-10 p-3">
-                        <input asp-for="ImageUrl" class="form-control" />
-                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        <input asp-for="Image" class="form-control" />
+                        <input asp-for="ImageLocalPath" hidden class="form-control" />
+                        <input asp-for="ImageUrl" hidden class="form-control" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
                     </div>
 
                     <div class="col-5 offset-2">
