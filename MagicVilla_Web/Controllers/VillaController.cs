@@ -36,12 +36,22 @@ namespace MagicVilla_Web.Controllers
         {
             return View();
         }
+        [Authorize(Roles ="admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateVilla(VillaCreateDTO model)
         {
+            Console.WriteLine($"Raw model: {System.Text.Json.JsonSerializer.Serialize(model)}");
+            foreach (var key in Request.Form.Keys)
+            {
+                Console.WriteLine($"Form key: {key}, value: {Request.Form[key]}");
+            }
+
             if (ModelState.IsValid)
             {
+                var json = System.Text.Json.JsonSerializer.Serialize(model);
+                Console.WriteLine($"Serialized model: {json}");
+
                 var response = await _villaService.CreateAsync<APIResponse>(model, HttpContext.Session.GetString(SD.SessionToken));
                 if (response != null && response.IsSuccess)
                 {
