@@ -5,5 +5,5 @@ namespace MagicVilla_Web.Services.IServices;
 public interface IBaseService
 {
     APIResponse responseModel { get; set; }
-    Task<T> SendAsync<T>(APIRequest request);//Send API Calls 
+    Task<T> SendAsync<T>(APIRequest request, bool withBearer = true);//Send API Calls  
 }

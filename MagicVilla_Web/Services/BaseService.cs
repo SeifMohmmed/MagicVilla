@@ -23,7 +23,7 @@ public class BaseService : IBaseService
         _httpClient = httpClient;
         _tokenProvider = tokenProvider;
     }
-    public async Task<T> SendAsync<T>(APIRequest apiRequest)
+    public async Task<T> SendAsync<T>(APIRequest apiRequest, bool withBearer = true)
     {
         try
         {
@@ -39,7 +39,7 @@ public class BaseService : IBaseService
             }
             message.RequestUri = new Uri(apiRequest.URL);
 
-            if (_tokenProvider.GetToken() != null)
+            if (withBearer && _tokenProvider.GetToken() != null)
             {
                 var token = _tokenProvider.GetToken();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
