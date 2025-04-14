@@ -14,15 +14,16 @@ public class Program
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddHttpClient<IVillaService, VillaService>();
+        builder.Services.AddHttpClient<IVillaNumberService, VillaNumberService>();
+        builder.Services.AddHttpClient<IAuthService, AuthService>();
         //for a single request it will have one object of villa service
         //even if it is requested ten times, it will use the same object
         builder.Services.AddScoped<IVillaService, VillaService>();
+        builder.Services.AddScoped<IBaseService, BaseService>();
         builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-        builder.Services.AddHttpClient<IVillaNumberService, VillaNumberService>();
         builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
-        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        builder.Services.AddHttpClient<IAuthService, AuthService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         builder.Services.AddDistributedMemoryCache();
 
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
