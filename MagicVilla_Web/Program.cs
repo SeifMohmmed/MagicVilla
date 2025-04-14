@@ -17,7 +17,7 @@ public class Program
         //for a single request it will have one object of villa service
         //even if it is requested ten times, it will use the same object
         builder.Services.AddScoped<IVillaService, VillaService>();
-
+        builder.Services.AddScoped<ITokenProvider, TokenProvider>();
         builder.Services.AddHttpClient<IVillaNumberService, VillaNumberService>();
         builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
