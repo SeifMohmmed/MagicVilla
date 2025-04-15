@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicVilla_VillaAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250415200805_AddRefreshTokenTableToDb")]
-    partial class AddRefreshTokenTableToDb
+    [Migration("20250415211318_AddRefreshTokenTable")]
+    partial class AddRefreshTokenTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

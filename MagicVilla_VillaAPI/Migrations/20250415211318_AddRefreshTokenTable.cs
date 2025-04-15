@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MagicVilla_VillaAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRefreshTokenTableToDb : Migration
+    public partial class AddRefreshTokenTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
