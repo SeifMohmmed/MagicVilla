@@ -54,7 +54,8 @@ public class UserRepostiory : IUserRepository
             };
 
         }
-        var accessToken = await GetAccessToken(user);
+        var jwtTokenId = $"JTI{Guid.NewGuid()}";
+        var accessToken = await GetAccessToken(user,jwtTokenId);
         TokenDTO tokenDto = new TokenDTO()
         {
             AccessToken = accessToken,
@@ -93,7 +94,7 @@ public class UserRepostiory : IUserRepository
         }
         return new UserDTO();
     }
-    public async Task<string> GetAccessToken(ApplicationUser user)
+    public async Task<string> GetAccessToken(ApplicationUser user,string jwtTokenId)
     {
         //if user was found Generate JWT Token
         var roles = await _userManager.GetRolesAsync(user);
@@ -105,7 +106,10 @@ public class UserRepostiory : IUserRepository
             Subject = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Name, user.UserName.ToString()),
-                new Claim(ClaimTypes.Role, roles.FirstOrDefault())
+                new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
+                new Claim(JwtRegisteredClaimNames.Jti, jwtTokenId),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+
             }),
             Expires = DateTime.Now.AddDays(7),
             SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
@@ -119,4 +123,20 @@ public class UserRepostiory : IUserRepository
     {
         throw new NotImplementedException();
     }
-}
+
+    private (bool isSuccessful, string userId, string tokenId) GetAccessTokenData(string accessToken)
+    {
+        try
+        {
+            var tokenHandler=new JwtSecurityTokenHandler();
+            var jwt=tokenHandler.ReadJwtToken(accessToken);
+            var jwtTokenId=jwt.Claims.First(c=>c.Type==JwtRegisteredClaimNames.Jti).Value;
+            var userId = jwt.Claims.First(c=>c.Type==JwtRegisteredClaimNames.Sub).Value;
+            return (true, userId, jwtTokenId);
+        }
+        catch (Exception ex)
+        {
+            return (false, null, null);
+        }
+    }
+ }
