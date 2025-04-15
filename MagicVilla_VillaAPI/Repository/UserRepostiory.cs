@@ -55,10 +55,12 @@ public class UserRepostiory : IUserRepository
 
         }
         var jwtTokenId = $"JTI{Guid.NewGuid()}";
-        var accessToken = await GetAccessToken(user,jwtTokenId);
-        TokenDTO tokenDto = new TokenDTO()
+        var accessToken = await GetAccessToken(user, jwtTokenId);
+        var refreshToken = await CreateNewRefreshToken(user.Id, jwtTokenId);
+        TokenDTO tokenDto = new()
         {
             AccessToken = accessToken,
+            RefreshToken = refreshToken,
         };
         return tokenDto;
     }
@@ -94,7 +96,7 @@ public class UserRepostiory : IUserRepository
         }
         return new UserDTO();
     }
-    public async Task<string> GetAccessToken(ApplicationUser user,string jwtTokenId)
+    public async Task<string> GetAccessToken(ApplicationUser user, string jwtTokenId)
     {
         //if user was found Generate JWT Token
         var roles = await _userManager.GetRolesAsync(user);
@@ -111,7 +113,7 @@ public class UserRepostiory : IUserRepository
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
 
             }),
-            Expires = DateTime.Now.AddDays(7),
+            Expires = DateTime.Now.AddMinutes(60),
             SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -124,14 +126,28 @@ public class UserRepostiory : IUserRepository
         throw new NotImplementedException();
     }
 
+    private async Task<string> CreateNewRefreshToken(string userId, string tokenId)
+    {
+        RefreshToken refreshToken = new RefreshToken()
+        {
+            IsValid = true,
+            UserId = userId,
+            JwtTokenId = tokenId,
+            ExpiresAt = DateTime.UtcNow.AddDays(30),
+            Refresh_Token = Guid.NewGuid() + "-" + Guid.NewGuid(),
+        };
+        await _context.AddAsync(refreshToken);
+        await _context.SaveChangesAsync();
+        return refreshToken.Refresh_Token;
+    }
     private (bool isSuccessful, string userId, string tokenId) GetAccessTokenData(string accessToken)
     {
         try
         {
-            var tokenHandler=new JwtSecurityTokenHandler();
-            var jwt=tokenHandler.ReadJwtToken(accessToken);
-            var jwtTokenId=jwt.Claims.First(c=>c.Type==JwtRegisteredClaimNames.Jti).Value;
-            var userId = jwt.Claims.First(c=>c.Type==JwtRegisteredClaimNames.Sub).Value;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwt = tokenHandler.ReadJwtToken(accessToken);
+            var jwtTokenId = jwt.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+            var userId = jwt.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
             return (true, userId, jwtTokenId);
         }
         catch (Exception ex)
@@ -139,4 +155,4 @@ public class UserRepostiory : IUserRepository
             return (false, null, null);
         }
     }
- }
+}
