@@ -8,4 +8,5 @@ public interface IUserRepository
     bool IsUnique(string username);
     Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO); 
     Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO); 
+    Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO); 
 }

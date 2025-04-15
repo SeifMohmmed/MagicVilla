@@ -114,4 +114,9 @@ public class UserRepostiory : IUserRepository
         var tokenStr = tokenHandler.WriteToken(token);
         return tokenStr;
     }
+
+    public Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO)
+    {
+        throw new NotImplementedException();
+    }
 }
