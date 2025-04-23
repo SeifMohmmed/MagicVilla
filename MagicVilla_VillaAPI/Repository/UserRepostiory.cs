@@ -145,14 +145,9 @@ public class UserRepostiory : IUserRepository
         if (!existingRefreshToken.IsValid)
         {
             var chainRecords = _context.RefreshTokens.Where(u => u.UserId == existingRefreshToken.UserId
-            && u.JwtTokenId == existingRefreshToken.JwtTokenId);
+            && u.JwtTokenId == existingRefreshToken.JwtTokenId)
+                .ExecuteUpdate(u => u.SetProperty(refreshToken => refreshToken.IsValid, false));
 
-            foreach (var item in chainRecords)
-            {
-                item.IsValid = false;
-            }
-            _context.UpdateRange(chainRecords);
-            _context.SaveChanges();
             return new TokenDTO();
         }
         // If just expired then mark as invalid and return empty
