@@ -142,7 +142,19 @@ public class UserRepostiory : IUserRepository
         }
 
         // When someone tries to use not valid refresh token, fraud possible
+        if (!existingRefreshToken.IsValid)
+        {
+            var chainRecords = _context.RefreshTokens.Where(u => u.UserId == existingRefreshToken.UserId
+            && u.JwtTokenId == existingRefreshToken.JwtTokenId);
 
+            foreach (var item in chainRecords)
+            {
+                item.IsValid = false;
+            }
+            _context.UpdateRange(chainRecords);
+            _context.SaveChanges();
+            return new TokenDTO();
+        }
         // If just expired then mark as invalid and return empty
         if (existingRefreshToken.ExpiresAt < DateTime.UtcNow)
         {
