@@ -121,9 +121,54 @@ public class UserRepostiory : IUserRepository
         return tokenStr;
     }
 
-    public Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO)
+    public async Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO)
     {
-        throw new NotImplementedException();
+        // Find an existing refresh token
+        var existingRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(u => u.Refresh_Token == tokenDTO.RefreshToken);
+        if (existingRefreshToken == null)
+        {
+            return new TokenDTO();
+        }
+
+        // Compare data from existing refresh and access token provided and if there is any missmatch
+        // then consider it as a fraud
+        var accessToken = GetAccessTokenData(tokenDTO.AccessToken);
+        if (!accessToken.isSuccessful || accessToken.userId != existingRefreshToken.UserId
+            || accessToken.tokenId != existingRefreshToken.JwtTokenId)
+        {
+            accessToken.isSuccessful = false;
+            _context.SaveChanges();
+        }
+
+        // When someone tries to use not valid refresh token, fraud possible
+
+        // If just expired then mark as invalid and return empty
+        if (existingRefreshToken.ExpiresAt < DateTime.UtcNow)
+        {
+            accessToken.isSuccessful = false;
+            _context.SaveChanges();
+        }
+        // replace old refresh with a new one with updated expire date
+        var newRefreshToken = await CreateNewRefreshToken(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+
+        // revoke existing refresh token
+        accessToken.isSuccessful = false;
+        _context.SaveChanges();
+
+        // generate new access token
+        var applicationUser = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == existingRefreshToken.UserId);
+        if (applicationUser == null)
+        {
+            return new TokenDTO();
+        }
+
+        var newAccessToken = await GetAccessToken(applicationUser, existingRefreshToken.JwtTokenId);
+
+        return new TokenDTO()
+        {
+            AccessToken = newAccessToken,
+            RefreshToken = newRefreshToken,
+        };
     }
 
     private async Task<string> CreateNewRefreshToken(string userId, string tokenId)
