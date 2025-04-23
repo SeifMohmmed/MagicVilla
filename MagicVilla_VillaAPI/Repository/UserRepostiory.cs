@@ -113,7 +113,7 @@ public class UserRepostiory : IUserRepository
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
 
             }),
-            Expires = DateTime.Now.AddMinutes(60),
+            Expires = DateTime.Now.AddMinutes(1),
             SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -136,8 +136,9 @@ public class UserRepostiory : IUserRepository
         if (!accessToken.isSuccessful || accessToken.userId != existingRefreshToken.UserId
             || accessToken.tokenId != existingRefreshToken.JwtTokenId)
         {
-            accessToken.isSuccessful = false;
+            existingRefreshToken.IsValid = false;
             _context.SaveChanges();
+            return new TokenDTO();
         }
 
         // When someone tries to use not valid refresh token, fraud possible
@@ -145,14 +146,15 @@ public class UserRepostiory : IUserRepository
         // If just expired then mark as invalid and return empty
         if (existingRefreshToken.ExpiresAt < DateTime.UtcNow)
         {
-            accessToken.isSuccessful = false;
+            existingRefreshToken.IsValid = false;
             _context.SaveChanges();
+            return new TokenDTO();
         }
         // replace old refresh with a new one with updated expire date
         var newRefreshToken = await CreateNewRefreshToken(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
 
         // revoke existing refresh token
-        accessToken.isSuccessful = false;
+        existingRefreshToken.IsValid = false;
         _context.SaveChanges();
 
         // generate new access token
@@ -178,7 +180,7 @@ public class UserRepostiory : IUserRepository
             IsValid = true,
             UserId = userId,
             JwtTokenId = tokenId,
-            ExpiresAt = DateTime.UtcNow.AddDays(30),
+            ExpiresAt = DateTime.UtcNow.AddMinutes(3),
             Refresh_Token = Guid.NewGuid() + "-" + Guid.NewGuid(),
         };
         await _context.AddAsync(refreshToken);
