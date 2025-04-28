@@ -1,6 +1,7 @@
 ﻿using AutoMapper.Internal;
 using MagicVilla_Utility;
 using MagicVilla_Web.Models;
+using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Services.IServices;
 using Newtonsoft.Json;
 using System.Net;
@@ -107,7 +108,7 @@ public class BaseService : IBaseService
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
             }
-            apiResponse = await client.SendAsync(messageFactory());
+            apiResponse = await SendWithRefreshToken(client,messageFactory,withBearer);
 
             var apiContent = await apiResponse.Content.ReadAsStringAsync();
             Console.WriteLine($"API Response: {apiContent}"); // Already logged
@@ -144,6 +145,39 @@ public class BaseService : IBaseService
             var res = JsonConvert.SerializeObject(dto);
             var APIResponse = JsonConvert.DeserializeObject<T>(res);
             return APIResponse;
+        }
+    }
+
+    public async Task<HttpResponseMessage> SendWithRefreshToken(HttpClient httpClient,
+        Func<HttpRequestMessage> httpRequestMessageFactory,
+        bool withBearer = true)
+    {
+        if (!withBearer)
+        {
+            return await httpClient.SendAsync(httpRequestMessageFactory());
+        }
+        else
+        {
+            TokenDTO tokenDTO = _tokenProvider.GetToken();
+
+            if (tokenDTO != null && !string.IsNullOrEmpty(tokenDTO.AccessToken))
+            {
+                httpClient.DefaultRequestHeaders.Authorization=new AuthenticationHeaderValue("Bearer",tokenDTO.AccessToken);
+            }
+            try
+            {
+                var response=await httpClient.SendAsync(httpRequestMessageFactory());
+                if (response.IsSuccessStatusCode)
+                    return response;
+
+                // IF this fails then we can pass refresh token!
+
+                return response;
+            }
+            catch(Exception e) 
+            {
+                throw;
+            }
         }
     }
 }
