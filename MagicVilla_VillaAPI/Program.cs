@@ -80,21 +80,22 @@ namespace MagicVilla_VillaAPI
                      ValidateIssuerSigningKey = true,
                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
                      ValidateIssuer = false,
-                     ValidateAudience = false
+                     ValidateAudience = false,
+                     ClockSkew = TimeSpan.Zero,
                  };
              });
 
 
 
             builder.Services.AddControllers();
-                //options =>
-                //{
-                //    options.CacheProfiles.Add("Default30"
-                //        , new CacheProfile()
-                //        {
-                //            Duration = 30
-                //        });
-                //}).AddNewtonsoftJson();
+            //options =>
+            //{
+            //    options.CacheProfiles.Add("Default30"
+            //        , new CacheProfile()
+            //        {
+            //            Duration = 30
+            //        });
+            //}).AddNewtonsoftJson();
 
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
@@ -173,7 +174,7 @@ namespace MagicVilla_VillaAPI
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v2/swagger.json", "Magic_VillaV2");
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json","Magic_VillaV1");
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Magic_VillaV1");
 
                 });
             }
