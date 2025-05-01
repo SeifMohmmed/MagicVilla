@@ -141,6 +141,7 @@ public class BaseService : IBaseService
                         break;
                 }
             }
+
             catch (Exception e)
             {
                 FinalApiResponse.ErrorMessages = new List<string>() { "Error Encountered", e.Message.ToString() };
@@ -148,6 +149,10 @@ public class BaseService : IBaseService
             var res = JsonConvert.SerializeObject(FinalApiResponse);
             var returnObj = JsonConvert.DeserializeObject<T>(res);
             return returnObj;
+        }
+        catch (AuthException)
+        {
+            throw;
         }
         catch (Exception e)
         {
@@ -195,6 +200,10 @@ public class BaseService : IBaseService
                 }
                 return response;
             }
+            catch (AuthException)
+            {
+                throw;
+            }
             catch (HttpRequestException httpRequestException)
             {
                 if (httpRequestException.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -228,6 +237,7 @@ public class BaseService : IBaseService
         {
             await _httpContextAccessor.HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
+            throw new AuthException();
         }
         else
         {
