@@ -25,6 +25,7 @@ public class Program
         builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        builder.Services.AddSingleton<IApiMessageRequestBuilder, ApiMessageRequestBuilder>();
         builder.Services.AddDistributedMemoryCache();
 
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
