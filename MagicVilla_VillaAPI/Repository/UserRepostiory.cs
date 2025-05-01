@@ -187,7 +187,7 @@ public class UserRepostiory : IUserRepository
             IsValid = true,
             UserId = userId,
             JwtTokenId = tokenId,
-            ExpiresAt = DateTime.UtcNow.AddMinutes(5),
+            ExpiresAt = DateTime.UtcNow.AddMinutes(2),
             Refresh_Token = Guid.NewGuid() + "-" + Guid.NewGuid(),
         };
         await _context.AddAsync(refreshToken);
