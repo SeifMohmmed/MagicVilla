@@ -27,7 +27,6 @@ public class AuthService : IAuthService
             URL = _villaUrl + $"/api/{SD.CurrentAPIVersion}/User/login"
         }, withBearer: false);
     }
-
     public async Task<T> RegisterAsync<T>(RegisterationRequestDTO obj)
     {
         return await _baseService.SendAsync<T>(new APIRequest
@@ -37,4 +36,14 @@ public class AuthService : IAuthService
             URL = _villaUrl + $"/api/{SD.CurrentAPIVersion}/User/register"
         }, withBearer: false);
     }
+    public async Task<T> LogoutAsync<T>(TokenDTO obj)
+    {
+        return await _baseService.SendAsync<T>(new APIRequest
+        {
+            ApiType = SD.ApiType.POST,
+            Data = obj,
+            URL = _villaUrl + $"/api/{SD.CurrentAPIVersion}/User/revoke"
+        });
+    }
+
 }

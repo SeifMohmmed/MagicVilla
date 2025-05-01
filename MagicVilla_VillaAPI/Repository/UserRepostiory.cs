@@ -172,7 +172,21 @@ public class UserRepostiory : IUserRepository
             RefreshToken = newRefreshToken,
         };
     }
+    public async Task RevokeRefreshToken(TokenDTO tokenDTO)
+    {
+        var existingRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(u=>u.Refresh_Token == tokenDTO.RefreshToken);
+        if(existingRefreshToken == null) 
+            return;
 
+        // Compare data from existing refresh and access token provided and
+        // if there is any missmatch then we should do nothing with refresh token
+        var isTokenVaild = GetAccessTokenData(tokenDTO.AccessToken, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+        if (!isTokenVaild)
+        {
+            return;
+        }
+        await MarkAllTokenInChainAsInvalid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+    }
     private async Task<string> CreateNewRefreshToken(string userId, string tokenId)
     {
         RefreshToken refreshToken = new RefreshToken()
@@ -213,4 +227,6 @@ public class UserRepostiory : IUserRepository
         refreshToken.IsValid = false;
         await _context.SaveChangesAsync();
     }
+
+  
 }
