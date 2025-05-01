@@ -53,12 +53,6 @@ public class BaseService : IBaseService
                 }
                 message.RequestUri = new Uri(apiRequest.URL);
 
-                if (withBearer && _tokenProvider.GetToken() != null)
-                {
-                    var token = _tokenProvider.GetToken();
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-                }
-
                 if (apiRequest.ContentType == ContentType.MultipartFormData)
                 {
                     var content = new MultipartFormDataContent();
@@ -111,38 +105,49 @@ public class BaseService : IBaseService
                 return message;
             };
 
-            HttpResponseMessage apiResponse = null;
+            HttpResponseMessage httpResponseMessage = null;
 
-            if (!string.IsNullOrEmpty(apiRequest.Token))
+
+
+            httpResponseMessage = await SendWithRefreshToken(client, messageFactory, withBearer);
+
+            APIResponse FinalApiResponse = new()
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
-            }
-            apiResponse = await SendWithRefreshToken(client, messageFactory, withBearer);
+                IsSuccess = false
+            };
 
-            var apiContent = await apiResponse.Content.ReadAsStringAsync();
-            Console.WriteLine($"API Response: {apiContent}"); // Already logged
 
             try
             {
-                APIResponse ApiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
-                if (ApiResponse != null && (apiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest
-                    || apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound))
+
+                switch (httpResponseMessage.StatusCode)
                 {
-                    ApiResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                    ApiResponse.IsSuccess = false;
-                    var res = JsonConvert.SerializeObject(ApiResponse);
-                    var returnObj = JsonConvert.DeserializeObject<T>(res);
-                    return returnObj;
+                    case HttpStatusCode.NotFound:
+                        FinalApiResponse.ErrorMessages = new List<string>() { "Not Found" };
+                        break;
+                    case HttpStatusCode.Unauthorized:
+                        FinalApiResponse.ErrorMessages = new List<string>() { "Unauthorized" };
+                        break;
+                    case HttpStatusCode.Forbidden:
+                        FinalApiResponse.ErrorMessages = new List<string>() { "Access Denied" };
+                        break;
+                    case HttpStatusCode.InternalServerError:
+                        FinalApiResponse.ErrorMessages = new List<string>() { "Internal Server Error" };
+                        break;
+                    default:
+                        var apiContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                        FinalApiResponse.IsSuccess = true;
+                        FinalApiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
+                        break;
                 }
             }
             catch (Exception e)
             {
-                var exceptionResponse = JsonConvert.DeserializeObject<T>(apiContent);
-                return exceptionResponse;
+                FinalApiResponse.ErrorMessages = new List<string>() { "Error Encountered", e.Message.ToString() };
             }
-            var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
-            return APIResponse;
-
+            var res = JsonConvert.SerializeObject(FinalApiResponse);
+            var returnObj = JsonConvert.DeserializeObject<T>(res);
+            return returnObj;
         }
         catch (Exception e)
         {
@@ -180,10 +185,10 @@ public class BaseService : IBaseService
                     return response;
 
                 // IF this fails then we can pass refresh token!
-                if(!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.Unauthorized)
+                if (!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     //GENERATE NEW Token from Refresh token / Sign in with that new token and then retry
-                    await InvokeRefreshTokenEndpoint(httpClient, tokenDTO.AccessToken,tokenDTO.RefreshToken);
+                    await InvokeRefreshTokenEndpoint(httpClient, tokenDTO.AccessToken, tokenDTO.RefreshToken);
                     response = await httpClient.SendAsync(httpRequestMessageFactory());
                     return response;
 
@@ -207,7 +212,8 @@ public class BaseService : IBaseService
     {
         HttpRequestMessage message = new();
         message.Headers.Add("Accept", "application/json");
-        message.RequestUri = new Uri($"{VillaApiUrl}/api/v{SD.CurrentAPIVersion}/UserAuth/refresh");
+        //message.RequestUri = new Uri($"{VillaApiUrl}/api/v{SD.CurrentAPIVersion}/UsersAuth/refresh");
+        message.RequestUri = new Uri($"{VillaApiUrl}/api/{SD.CurrentAPIVersion}/User/refresh");
         message.Method = HttpMethod.Post;
         message.Content = new StringContent(JsonConvert.SerializeObject(new TokenDTO()
         {
@@ -218,7 +224,7 @@ public class BaseService : IBaseService
         var content = await response.Content.ReadAsStringAsync();
         var apiRespose = JsonConvert.DeserializeObject<APIResponse>(content);
 
-        if (apiRespose?.IsSuccess != null)
+        if (apiRespose?.IsSuccess != true)
         {
             await _httpContextAccessor.HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
@@ -228,7 +234,7 @@ public class BaseService : IBaseService
             var tokenDataStr = JsonConvert.SerializeObject(apiRespose);
             var tokenDto = JsonConvert.DeserializeObject<TokenDTO>(tokenDataStr);
 
-            if (tokenDto != null && !String.IsNullOrEmpty(tokenDto.AccessToken))
+            if (tokenDto != null && !string.IsNullOrEmpty(tokenDto.AccessToken))
             {
 
                 //New method to sign in with the new token that we receive
