@@ -124,8 +124,22 @@ namespace MagicVilla_VillaAPI
 
 
             app.MapControllers();
-
+            ApplyMigrations();
             app.Run();
+
+
+            void ApplyMigrations()
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                    if (_db.Database.GetPendingMigrations().Any())
+                    {
+                        _db.Database.Migrate();
+                    }
+                }
+            }
         }
     }
 }
