@@ -79,8 +79,10 @@ namespace MagicVilla_VillaAPI
                  {
                      ValidateIssuerSigningKey = true,
                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-                     ValidateIssuer = false,
-                     ValidateAudience = false,
+                     ValidateIssuer = true,
+                     ValidIssuer = "https://localhost:7001",
+                     ValidateAudience = true,
+                     ValidAudience = "dotnetmastery.com",
                      ClockSkew = TimeSpan.Zero,
                  };
              });
