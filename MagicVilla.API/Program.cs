@@ -1,5 +1,4 @@
-
-using MagicVilla.API.Extentions;
+using MagicVilla.API.Middlewares;
 using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Filters;
 using MagicVilla_VillaAPI.Models;
@@ -134,7 +133,9 @@ namespace MagicVilla_VillaAPI
             }
             //app.UseExceptionHandler("/ErrorHandling/ProcessError");
 
-            app.HandleError(app.Environment.IsDevelopment());
+            //app.HandleError(app.Environment.IsDevelopment());
+
+            app.UseMiddleware<CustomExceptionMiddleware>();
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();
