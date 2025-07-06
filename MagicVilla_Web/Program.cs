@@ -12,7 +12,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews(u=>u.Filters.Add(new AuthExceptionRedirection()));
+        builder.Services.AddControllersWithViews(u => u.Filters.Add(new AuthExceptionRedirection()));
 
         builder.Services.AddHttpClient<IVillaService, VillaService>();
         builder.Services.AddHttpClient<IVillaNumberService, VillaNumberService>();
@@ -27,6 +27,7 @@ public class Program
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         builder.Services.AddSingleton<IApiMessageRequestBuilder, ApiMessageRequestBuilder>();
         builder.Services.AddDistributedMemoryCache();
+
 
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>

@@ -5,11 +5,13 @@ using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Repository;
 using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
@@ -95,6 +97,13 @@ namespace MagicVilla_VillaAPI
             builder.Services.AddControllers(option =>
             {
                 option.Filters.Add<CustomExceptionFilter>();
+            }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.ClientErrorMapping[StatusCodes.Status500InternalServerError] = new ClientErrorData
+                {
+                    Link = "https://dotnetmaster/500"
+                };
             });
 
             builder.Services.AddEndpointsApiExplorer();
@@ -124,7 +133,39 @@ namespace MagicVilla_VillaAPI
                     options.RoutePrefix = "";
                 });
             }
-            app.UseExceptionHandler("/ErrorHandling/ProcessError");
+            //app.UseExceptionHandler("/ErrorHandling/ProcessError");
+
+            app.UseExceptionHandler(error =>
+            {
+                error.Run(async context =>
+                {
+                    context.Response.StatusCode = 500;
+                    context.Response.ContentType = "application/json";
+                    var feature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (feature != null)
+                    {
+                        if (app.Environment.IsDevelopment())
+                        {
+                            await context.Response.WriteAsync(JsonConvert.SerializeObject(new
+                            {
+                                StatusCode = context.Response.StatusCode,
+                                ErrorMessage = feature.Error.Message,
+                                StackTrace = feature.Error.StackTrace
+                            }));
+                        }
+                        else
+                        {
+                            await context.Response.WriteAsync(JsonConvert.SerializeObject(new
+                            {
+                                Statuscode = context.Response.StatusCode,
+                                ErrorMessage = "Hello From Program.cs Exception Handler"
+                            }));
+                        }
+                    }
+
+                });
+            });
+
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseAuthentication();
