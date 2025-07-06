@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicVilla.API", "MagicVilla_VillaAPI\MagicVilla.API.csproj", "{2E3990C3-027C-4135-AEB7-111F96AD34A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicVilla.Utility", "MagicVilla.Utility\MagicVilla.Utility.csproj", "{32E697E4-DB64-6BB6-169F-FCA3273DFCB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicVilla.Web", "MagicVilla_Web\MagicVilla.Web.csproj", "{4DBC41CC-FCFF-4CCF-BCB1-309453718036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicVilla.Web", "MagicVilla.Web\MagicVilla.Web.csproj", "{51EB8515-82A5-286C-2B28-E9AC103A840C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicVilla.Utility", "MagicVilla_Utility\MagicVilla.Utility.csproj", "{46BFB04F-8A5E-4430-805A-933C008A87BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicVilla.API", "MagicVilla.API\MagicVilla.API.csproj", "{3DCBE5F5-BBB8-1E60-0FD8-F345F9D0A14E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2E3990C3-027C-4135-AEB7-111F96AD34A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E3990C3-027C-4135-AEB7-111F96AD34A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E3990C3-027C-4135-AEB7-111F96AD34A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E3990C3-027C-4135-AEB7-111F96AD34A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4DBC41CC-FCFF-4CCF-BCB1-309453718036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DBC41CC-FCFF-4CCF-BCB1-309453718036}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DBC41CC-FCFF-4CCF-BCB1-309453718036}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DBC41CC-FCFF-4CCF-BCB1-309453718036}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46BFB04F-8A5E-4430-805A-933C008A87BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46BFB04F-8A5E-4430-805A-933C008A87BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46BFB04F-8A5E-4430-805A-933C008A87BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46BFB04F-8A5E-4430-805A-933C008A87BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E697E4-DB64-6BB6-169F-FCA3273DFCB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E697E4-DB64-6BB6-169F-FCA3273DFCB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E697E4-DB64-6BB6-169F-FCA3273DFCB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E697E4-DB64-6BB6-169F-FCA3273DFCB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51EB8515-82A5-286C-2B28-E9AC103A840C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51EB8515-82A5-286C-2B28-E9AC103A840C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51EB8515-82A5-286C-2B28-E9AC103A840C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51EB8515-82A5-286C-2B28-E9AC103A840C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DCBE5F5-BBB8-1E60-0FD8-F345F9D0A14E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DCBE5F5-BBB8-1E60-0FD8-F345F9D0A14E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DCBE5F5-BBB8-1E60-0FD8-F345F9D0A14E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DCBE5F5-BBB8-1E60-0FD8-F345F9D0A14E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
