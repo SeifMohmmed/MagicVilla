@@ -6,11 +6,11 @@ using System.Linq.Expressions;
 
 namespace MagicVilla_VillaAPI.Repository;
 
-public class VillaNumberRepostiory : Repository<VillaNumber>,IVillaNumberRepository
+public class VillaNumberRepository : Repository<VillaNumber>,IVillaNumberRepository
 {
     private readonly ApplicationDbContext _context;
 
-    public VillaNumberRepostiory(ApplicationDbContext context) :base(context)
+    public VillaNumberRepository(ApplicationDbContext context) :base(context)
     {
         _context = context;
     }

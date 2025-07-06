@@ -12,7 +12,7 @@ using System.Text;
 
 namespace MagicVilla_VillaAPI.Repository;
 
-public class UserRepostiory : IUserRepository
+public class UserRepository : IUserRepository
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -20,7 +20,7 @@ public class UserRepostiory : IUserRepository
     private readonly IMapper _mapper;
     private readonly string secretKey;
 
-    public UserRepostiory(ApplicationDbContext context, IConfiguration configuration,
+    public UserRepository(ApplicationDbContext context, IConfiguration configuration,
         UserManager<ApplicationUser> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager)
     {
         _context = context;
@@ -135,8 +135,8 @@ public class UserRepostiory : IUserRepository
 
         // Compare data from existing refresh and access token provided and if there is any missmatch
         // then consider it as a fraud
-        var isTokenVaild = GetAccessTokenData(tokenDTO.AccessToken, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
-        if (!isTokenVaild)
+        var isTokenValid = GetAccessTokenData(tokenDTO.AccessToken, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+        if (!isTokenValid)
         {
             await MarkTokenAsInvalid(existingRefreshToken);
             return new TokenDTO();
@@ -183,8 +183,8 @@ public class UserRepostiory : IUserRepository
 
         // Compare data from existing refresh and access token provided and
         // if there is any missmatch then we should do nothing with refresh token
-        var isTokenVaild = GetAccessTokenData(tokenDTO.AccessToken, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
-        if (!isTokenVaild)
+        var isTokenValid = GetAccessTokenData(tokenDTO.AccessToken, existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+        if (!isTokenValid)
         {
             return;
         }

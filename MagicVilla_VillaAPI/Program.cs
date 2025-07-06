@@ -1,5 +1,6 @@
 
 using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Filters;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Repository;
 using MagicVilla_VillaAPI.Repository.IRepository;
@@ -49,9 +50,10 @@ namespace MagicVilla_VillaAPI
 
             builder.Services.AddResponseCaching();
 
-            builder.Services.AddScoped<IUserRepository, UserRepostiory>();
-            builder.Services.AddScoped<IVillaRepository, VillaRepostiory>();
-            builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepostiory>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IVillaRepository, VillaRepository>();
+            builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
+            builder.Services.AddAutoMapper(typeof(MappingConfig));
 
             builder.Services.AddApiVersioning(options =>
             {
@@ -90,17 +92,12 @@ namespace MagicVilla_VillaAPI
 
 
 
-            builder.Services.AddControllers();
-            //options =>
-            //{
-            //    options.CacheProfiles.Add("Default30"
-            //        , new CacheProfile()
-            //        {
-            //            Duration = 30
-            //        });
-            //}).AddNewtonsoftJson();
+            builder.Services.AddControllers(option =>
+            {
+                option.Filters.Add<CustomExceptionFilter>();
+            });
 
-            builder.Services.AddAutoMapper(typeof(MappingConfig));
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             builder.Services.AddSwaggerGen();
 
