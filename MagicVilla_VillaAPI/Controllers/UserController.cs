@@ -16,22 +16,29 @@ namespace MagicVilla_VillaAPI.Controllers
         public UserController(IUserRepository userRepo)
         {
             _userRepo = userRepo;
-            _response = new ();
+            _response = new();
         }
+
+        [HttpGet("Error")]
+        public Task<IActionResult> Error()
+        {
+            throw new FileNotFoundException();
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
         {
-            var tokenDto=await _userRepo.Login(model);
+            var tokenDto = await _userRepo.Login(model);
             if (tokenDto == null || string.IsNullOrEmpty(tokenDto.AccessToken))
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
-                _response.IsSuccess=false;
+                _response.IsSuccess = false;
                 _response.ErrorMessages.Add("Username Or Password is Incorrect");
                 return BadRequest(_response);
             }
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
-            _response.Result=tokenDto;
+            _response.Result = tokenDto;
 
             return Ok(_response);
         }
@@ -64,7 +71,7 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var tokenDTOResponse=await _userRepo.RefreshAccessToken(tokenDTO);
+                var tokenDTOResponse = await _userRepo.RefreshAccessToken(tokenDTO);
                 if (tokenDTOResponse == null || string.IsNullOrEmpty(tokenDTOResponse.AccessToken))
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -74,13 +81,13 @@ namespace MagicVilla_VillaAPI.Controllers
                 }
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
-                _response.Result= tokenDTOResponse;
+                _response.Result = tokenDTOResponse;
                 return Ok(_response);
             }
             else
             {
-                _response.IsSuccess=false;
-                _response.Result="Invalid Input";
+                _response.IsSuccess = false;
+                _response.Result = "Invalid Input";
                 return BadRequest(_response);
             }
         }
