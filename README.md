@@ -10,7 +10,7 @@
 
 Demo Link:- https://magicvilla-dnm.azurewebsites.net/
 
-Git Link:- https://github.com/SeifMohmmed/MagicVilla_API.git
+Git Link:- https://github.com/SeifMohmmed/MagicVilla.git
 
 ---
 
@@ -19,13 +19,13 @@ Git Link:- https://github.com/SeifMohmmed/MagicVilla_API.git
 - 🏠 **Villa Management:** Create, update, delete, and list villas with image support and amenity details.  
 - 🔐 **Authentication:** Secure JWT‑based authentication with login, registration, and logout endpoints.
 - 👥 **Role‑Based Access:** Admin and Customer roles with tailored permissions.  
-- 📱 API Versioning:** Versioned API (`v1`, `v2`) for backward compatibility. 
+- 📱 **API Versioning:** Versioned API (`v1`, `v2`) for backward compatibility. 
 - 🖥️ **Razor Pages UI:** Clean front‑end with cookie‑based authentication.  
 - 🚨 **Error Handling:** Unified API response format using `APIResponse`.  
 - 🖼️ **Image Uploads:** Upload and manage villa images via API or web.
 - 🔍 **Pagination & Filtering:** Filter villas by occupancy, search terms, and paginate results.  
-- ⚡ Caching Support
-- 🔄 Automatic Database Migrations
+- ⚡ **Caching Support**
+- 🔄 **Automatic Database Migrations**
 
 
 ---
