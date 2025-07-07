@@ -5,48 +5,83 @@
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![Swagger UI](https://img.shields.io/badge/API-Docs-blue.svg)](https://localhost:<port>/swagger)
 
-**MagicVilla** is a modern web application for managing villa listings, built with **ASP.NET Core (.NET 9)** and **Razor Pages**. It delivers a fully‑featured, versioned RESTful API, secure JWT‑based authentication, role‑based authorization, and a clean, responsive front‑end interface.
+**MagicVilla** is a modern web application for managing villa listings, built with **ASP.NET Core (.NET 9)** and **Razor Pages**. It delivers a fully‑featured, versioned RESTful API, secure JWT‑based authentication, role‑based authorization, and a clean, responsive front‑end interface.
 
----
 
-## 📑 Table of Contents
+Demo Link:- https://magicvilla-dnm.azurewebsites.net/
 
-* [✨ Features](#-features)
-* [🧱 Project Structure](#-project-structure)
-* [🧰 Tech Stack](#-tech-stack)
-* [🚀 Getting Started](#-getting-started)
-
-  * [✅ Prerequisites](#-prerequisites)
-  * [⚙️ Setup](#️-setup)
-* [📡 API Endpoints](#-api-endpoints)
-
-  * [🔄 Version 1 (v1)](#-version1v1)
-  * [📸 Version 2 (v2)](#-version2v2)
-* [🔐 Authentication & Authorization](#-authentication--authorization)
-* [⚙️ Configuration](#️-configuration)
-* [🛠️ Development Notes](#-development-notes)
-* [🖼️ Screenshots](#-screenshots)
-* [📄 License](#-license)
-* [🤝 Contributing](#-contributing)
-* [📬 Contact](#-contact)
+Git Link:- https://github.com/SeifMohmmed/MagicVilla_API.git
 
 ---
 
 ## ✨ Features
 
 - 🏠 **Villa Management:** Create, update, delete, and list villas with image support and amenity details.  
-- 🌐 **RESTful API:** Versioned API (`v1`, `v2`) for backward compatibility.  
-- 🔐 **Authentication:** Secure JWT‑based authentication with login, registration, and logout endpoints.  
+- 🔐 **Authentication:** Secure JWT‑based authentication with login, registration, and logout endpoints.
 - 👥 **Role‑Based Access:** Admin and Customer roles with tailored permissions.  
-- 🖥️ **Razor Pages UI:** Clean front‑end with cookie‑based authentication.  
-- 🔍 **Pagination & Filtering:** Filter villas by occupancy, search terms, and paginate results.  
-- 🖼️ **Image Uploads:** Upload and manage villa images via API or web.  
+- 📱 API Versioning:** Versioned API (`v1`, `v2`) for backward compatibility. 
+- 🖥️ **Razor Pages UI:** Clean front‑end with cookie‑based authentication.  
 - 🚨 **Error Handling:** Unified API response format using `APIResponse`.  
-- 📘 **Swagger/OpenAPI:** Built‑in API documentation and testing via Swagger UI.  
+- 🖼️ **Image Uploads:** Upload and manage villa images via API or web.
+- 🔍 **Pagination & Filtering:** Filter villas by occupancy, search terms, and paginate results.  
+- ⚡ Caching Support
+- 🔄 Automatic Database Migrations
+
 
 ---
 
-## 🧱 Project Structure
+## 🧰 Technology Stack
+
+### 🔹 Backend
+
+- **.NET 9 / C# 13**
+- **ASP.NET Core Web API**
+- **Entity Framework Core** + **SQL Server**
+- **JWT Authentication**
+- **AutoMapper**
+
+### 🔹 Frontend
+
+- **ASP.NET MVC**
+- **Razor Pages**
+- **Bootstrap 5**
+- **JavaScript**
+
+---
+
+## 🚀 Getting Started
+
+### ✅ Prerequisites
+
+
+* [.NET 9 SDK](https://dotnet.microsoft.com/download) ➜ `dotnet --version` ≥ 9.0 
+- SQL Server
+- Visual Studio 2022 or VS Code
+
+### ⚙️ Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/mohamedelsaid056/mvcClient_apiPorvider_villaProject_DotNET
+   ```
+
+2. **Update Connection String**
+   - Navigate to `appsettings.json` in both API and Web projects
+   - Update the `DefaultSQLConnection` to your SQL Server instance
+
+3. **Apply Database Migrations**
+   - The application will automatically apply pending migrations on startup
+   - Alternatively, you can run manually:
+     ```bash
+     dotnet ef database update
+     ```
+
+4. **Run the Applications**
+   - Start the API project first
+   - Then start the Web project
+   - API Swagger documentation will be available at: `https://localhost:[port]/`
+
+## 🗂️ Project Structure
 
 ```text
 MagicVilla/
@@ -64,76 +99,11 @@ MagicVilla/
 └── README.md                # You‑re‑reading‑it
 ```
 
----
-
-## 🧰 Tech Stack
-
-* **.NET 9 / C# 13** — core runtime & language
-* **ASP.NET Core Web API** — high‑performance REST services
-* **Razor Pages** — page‑centric server‑side UI
-* **Entity Framework Core** + **SQL Server** — data persistence
-* **AutoMapper** — object‑object mapping
-* **JWT Authentication** — stateless security tokens
-* **Swagger / Swashbuckle** — interactive API docs
-* **jQuery Validation** — client‑side form validation (MIT)
-
----
-
-## 🚀 Getting Started
-
-### ✅ Prerequisites
-
-* [.NET 9 SDK](https://dotnet.microsoft.com/download) ➜ `dotnet --version` ≥ 9.0
-* **SQL Server** (Developer / Express / Docker)
-* **Visual Studio 2022** or **VS Code** with C# extensions
-
-### ⚙️ Setup
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/<your‑org>/MagicVilla.git
-   cd MagicVilla
-   ```
-
-2. **Restore dependencies**
-
-   ```bash
-   dotnet restore
-   ```
-
-3. **Configure connection strings**
-
-   Edit `MagicVilla.API/appsettings.json` (and `MagicVilla_Web/appsettings.json`) and set **ConnectionStrings\:DefaultConnection** to your SQL Server instance.
-
-4. **Apply migrations & seed data**
-
-   ```bash
-   dotnet ef database update --project MagicVilla.API
-   ```
-
-5. **Run the API**
-
-   ```bash
-   dotnet run --project MagicVilla.API
-   ```
-
-6. **Run the Web App (optional)**
-
-   ```bash
-   dotnet run --project MagicVilla_Web
-   ```
-
-7. **Access the applications**
-
-   * **Swagger UI** ➜ [https://localhost\:PORT/swagger](https://localhost:PORT/swagger)
-   * **Web UI** ➜ [https://localhost\:PORT/](https://localhost:PORT/)
-
----
+  
 
 ## 📡 API Endpoints
 
-### 🔄 Version 1 (v1)
+### 🔄 Version 1 (v1)
 
 | Method | Endpoint                | Description                     | Role      |
 | ------ | ----------------------- | ------------------------------- | --------- |
@@ -144,7 +114,7 @@ MagicVilla/
 | PATCH  | `/api/v1/VillaAPI/{id}` | Partial update                  | **Admin** |
 | DELETE | `/api/v1/VillaAPI/{id}` | Delete villa                    | **Admin** |
 
-### 📸 Version 2 (v2)
+### 📸 Version 2 (v2)
 
 All **v1** endpoints plus:
 
@@ -154,54 +124,130 @@ All **v1** endpoints plus:
 
 ---
 
-## 🔐 Authentication & Authorization
 
-| Flow           | Details                                                                                                            |
-| -------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **JWT Tokens** | Issued at `/api/v1/Auth/login` & `/api/v1/Auth/register`. Include in `Authorization: Bearer <token>` header.       |
-| **Roles**      | `Admin` (full CRUD), `Customer` (read‑only)                                                                        |
-| **Web UI**     | Stores JWT in a secure, **HttpOnly cookie** for API calls; Razor Pages are protected via `[Authorize]` attributes. |
+ ## 📦 NuGet Packages (Backend)
+####  ORM
+install-package Microsoft.EntityFrameworkCore.Sqlite  
+install-package Microsoft.EntityFrameworkCore  
+install-package Microsoft.EntityFrameworkCore.Design  
 
-**Auth Endpoints**
+### 🔐Identity 
+install-package microsoft.aspnetcore.identity.EntityFrameworkCore  
+install-package microsoft.aspnetcore.identity  
+install-package microsoft.identitymodel.tokens  
+install-package System.IdentityModel.Tokens.Jwt 
 
-| Method | Endpoint                | Purpose                   |
-| ------ | ----------------------- | ------------------------- |
-| POST   | `/api/v1/Auth/login`    | User login                |
-| POST   | `/api/v1/Auth/register` | Register new user         |
-| POST   | `/api/v1/Auth/logout`   | Revoke JWT & clear cookie |
+## 🛢️ Data Storage  
+using **SQL** for **Development** enviroment and **Production** also 
 
----
+
+
+## 🔐 Authentication
+
+- **API:** Uses JWT Bearer token authentication
+- **Web:** Uses Cookie authentication with a 30-minute session timeout
 
 ## ⚙️ Configuration
 
-| Key                                   | File               | Purpose                  |
-| ------------------------------------- | ------------------ | ------------------------ |
-| `ConnectionStrings:DefaultConnection` | `appsettings.json` | SQL Server connection    |
-| `JWTSettings:Key`                     | `appsettings.json` | Symmetric signing key    |
-| `JWTSettings:Issuer` / `Audience`     | `appsettings.json` | Token validation         |
-| `ImageSettings:Path`                  | `appsettings.json` | Local image storage path |
+Key configuration options are available in `appsettings.json`:
 
----
+- Database connection string
+- JWT settings
+- API URLs
+- Authentication settings
 
-## 🛠️ Development Notes
+##🚨 Error Handling
 
-* Written in **.NET 9** using new **HTTP/3** and **output caching** middleware.
-* Implements **Repository** and **Unit‑of‑Work** patterns for data access.
-* Uses **Layered Architecture**: API ↔ Service ↔ Repository ↔ Data.
-* Built‑in protection against **XSS**, **CSRF**, secure headers, and **rate limiting**.
-* Lazy loading enabled for navigation properties.
-* Consistent error schema via `APIResponse<T>`.
+- Custom exception middleware
+- Global error handling
+- Logging support
+- Custom error pages
 
----
 
 ## 🖼️ Screenshots
 
-Add your screenshots to `screenshots/` and link them here.
-
-```md
-![Home Page](screenshots/home.png)
-![Admin View](screenshots/admin.png)
-```
+<p align="center" style="display: flex; justify-content: center; gap: 8px;">
+   <img src="Screenshots/1.png" alt="image alt" style="max-width: 100px;" />
+   <img src="Screenshots/2.png" alt="image alt" style="max-width: 100px;" />
+   <img src="Screenshots/3.png" alt="image alt" style="max-width: 100px;" />
+   <img src="Screenshots/4.png" alt="image alt" style="max-width: 100px;" />
+   <img src="Screenshots/5.png" alt="image alt" style="max-width: 100px;" />
+   <img src="Screenshots/6.png" alt="image alt" style="max-width: 100px;" />
+</p>
 
 ---
+
+## Running the Project
+
+### Prerequisites Setup
+
+1. **Database Configuration**
+   - Open `appsettings.json` in `MagicVilla_VillaAPI` project
+   - Update the `DefaultSQLConnection` string to your SQL Server instance:
+     ```json
+     "ConnectionStrings": {
+       "DefaultSQLConnection": "Server=YOUR_SERVER;Database=MagicVilla;Trusted_Connection=True;MultipleActiveResultSets=true"
+     }
+     ```
+
+2. **JWT Configuration**
+   - In `MagicVilla_VillaAPI/appsettings.json`, ensure the JWT secret key is set:
+     ```json
+     "ApiSettings": {
+       "Secret": "YOUR_SECRET_KEY"
+     }
+     ```
+
+### Starting the Projects
+
+1. **Start the API Project First**
+   ```bash
+   cd MagicVilla_VillaAPI
+   dotnet run
+   ```
+   The API will:
+   - Automatically apply any pending migrations
+   - Start the Swagger UI at `https://localhost:4200/`
+   - Set up static file handling for images in the `/images` directory
+   - Enable JWT authentication
+
+2. **Start the Web Project**
+   ```bash
+   cd MagicVilla_Web
+   dotnet run
+   ```
+   The Web application will:
+   - Start with cookie-based authentication
+   - Session timeout set to 30 minutes
+   - Redirect to `/Auth/Login` for unauthorized access
+
+### Available Features
+
+- **API Documentation:** Access Swagger UI at the root URL
+  - Version 1: `/swagger/v1/swagger.json`
+  - Version 2: `/swagger/v2/swagger.json`
+
+- **Authentication:**
+  - API uses JWT Bearer tokens
+  - Web client uses cookie authentication
+  - Login path: `/Auth/Login`
+  - Access denied path: `/Auth/AccessDenied`
+
+- **Static Files:**
+  - Images are served from the `/images` directory in the API project
+  - Access images via: `https://localhost:4200/images/[filename]`
+
+### Development vs Production
+
+- **Development Environment:**
+  - Detailed error messages
+  - Swagger UI available at `/swagger`
+  - Exception handling with detailed information
+
+- **Production Environment:**
+  - Swagger UI available at root URL
+  - HSTS enabled
+  - Custom error handling middleware
+  - Secure static file serving
+
 
