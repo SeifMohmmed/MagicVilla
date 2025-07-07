@@ -99,7 +99,7 @@ MagicVilla/
 └── README.md                # You‑re‑reading‑it
 ```
 
-  
+---  
 
 ## 📡 API Endpoints
 
@@ -249,5 +249,4 @@ Key configuration options are available in `appsettings.json`:
   - HSTS enabled
   - Custom error handling middleware
   - Secure static file serving
----
 
