@@ -1,4 +1,4 @@
-# 🏡 MagicVilla Project
+# 🏡 MagicVilla
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![.NET 9](https://img.shields.io/badge/.NET-9-blue.svg)](https://dotnet.microsoft.com/download)
