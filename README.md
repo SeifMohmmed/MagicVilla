@@ -62,7 +62,7 @@ Git Link:- https://github.com/SeifMohmmed/MagicVilla.git
 
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/SeifMohmmed/MagicVilla.git
+   git clone https://github.com/SeifMohmmed/MagicVilla.git
    ```
 
 2. **Update Connection String**
@@ -80,7 +80,7 @@ Git Link:- https://github.com/SeifMohmmed/MagicVilla.git
    - Start the API project first
    - Then start the Web project
    - API Swagger documentation will be available at: `https://localhost:[port]/`
-
+---
 ## 🗂️ Project Structure
 
 ```text
@@ -146,7 +146,7 @@ using **SQL** for **Development** enviroment and **Production** also
 
 - **API:** Uses JWT Bearer token authentication
 - **Web:** Uses Cookie authentication with a 30-minute session timeout
-
+---
 ## ⚙️ Configuration
 
 Key configuration options are available in `appsettings.json`:
@@ -163,7 +163,7 @@ Key configuration options are available in `appsettings.json`:
 - Logging support
 - Custom error pages
 
-
+---
 ## 🖼️ Screenshots
 
 <p align="center" style="display: flex; justify-content: center; gap: 8px;">
@@ -197,7 +197,7 @@ Key configuration options are available in `appsettings.json`:
        "Secret": "YOUR_SECRET_KEY"
      }
      ```
-
+---
 ### Starting the Projects
 
 1. **Start the API Project First**
@@ -220,7 +220,7 @@ Key configuration options are available in `appsettings.json`:
    - Start with cookie-based authentication
    - Session timeout set to 30 minutes
    - Redirect to `/Auth/Login` for unauthorized access
-
+---
 ### Available Features
 
 - **API Documentation:** Access Swagger UI at the root URL
@@ -236,7 +236,7 @@ Key configuration options are available in `appsettings.json`:
 - **Static Files:**
   - Images are served from the `/images` directory in the API project
   - Access images via: `https://localhost:4200/images/[filename]`
-
+---
 ### Development vs Production
 
 - **Development Environment:**
@@ -249,5 +249,5 @@ Key configuration options are available in `appsettings.json`:
   - HSTS enabled
   - Custom error handling middleware
   - Secure static file serving
-
+---
 
