@@ -62,7 +62,7 @@ Git Link:- https://github.com/SeifMohmmed/MagicVilla.git
 
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/mohamedelsaid056/mvcClient_apiPorvider_villaProject_DotNET
+   git clone [https://github.com/SeifMohmmed/MagicVilla.git
    ```
 
 2. **Update Connection String**
@@ -182,7 +182,7 @@ Key configuration options are available in `appsettings.json`:
 ### Prerequisites Setup
 
 1. **Database Configuration**
-   - Open `appsettings.json` in `MagicVilla_VillaAPI` project
+   - Open `appsettings.json` in `MagicVilla.API` project
    - Update the `DefaultSQLConnection` string to your SQL Server instance:
      ```json
      "ConnectionStrings": {
@@ -191,7 +191,7 @@ Key configuration options are available in `appsettings.json`:
      ```
 
 2. **JWT Configuration**
-   - In `MagicVilla_VillaAPI/appsettings.json`, ensure the JWT secret key is set:
+   - In `MagicVilla.API/appsettings.json`, ensure the JWT secret key is set:
      ```json
      "ApiSettings": {
        "Secret": "YOUR_SECRET_KEY"
@@ -202,7 +202,7 @@ Key configuration options are available in `appsettings.json`:
 
 1. **Start the API Project First**
    ```bash
-   cd MagicVilla_VillaAPI
+   cd MagicVilla.API
    dotnet run
    ```
    The API will:
@@ -213,7 +213,7 @@ Key configuration options are available in `appsettings.json`:
 
 2. **Start the Web Project**
    ```bash
-   cd MagicVilla_Web
+   cd MagicVilla.Web
    dotnet run
    ```
    The Web application will:
